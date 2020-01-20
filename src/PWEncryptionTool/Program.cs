@@ -66,9 +66,25 @@ namespace PWEncryptionTool
 
             Console.Write($"Processing '{opts.InputFile}'...");
             byte[] data = File.ReadAllBytes(opts.InputFile);
-            byte[] processedData = ProcessData(data, encrypt);
-            File.WriteAllBytes(opts.OutputFile, processedData);
-            Console.WriteLine(" DONE!");
+
+            if (!encrypt && !IsEncrypted(data))
+            {
+                Console.WriteLine(" NOT ENCRYPTED!!");
+            }
+            else
+            {
+                byte[] processedData = ProcessData(data, encrypt);
+                Directory.CreateDirectory(Path.GetDirectoryName(opts.OutputFile));
+                File.WriteAllBytes(opts.OutputFile, processedData);
+                Console.WriteLine(" DONE!");
+            }
+        }
+
+        private static bool IsEncrypted(byte[] data)
+        {
+            byte[] unityFsMagic = { 0x55, 0x6E, 0x69, 0x74, 0x79, 0x46, 0x53 }; // UnityFs
+            var span = new ReadOnlySpan<byte>(data, 0, 7);
+            return !span.SequenceEqual(new ReadOnlySpan<byte>(unityFsMagic));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5379:Do Not Use Weak Key Derivation Function Algorithm", Justification = "Game algorithm.")]
