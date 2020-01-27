@@ -6,7 +6,7 @@ namespace PWEncryptionTool.Options
     using CommandLine;
 
     /// <summary>
-    /// Phoenix Wright: Ace Attorney Trilogy decrypt options.
+    /// Phoenix Wright: Ace Attorney Trilogy common options.
     /// </summary>
     internal class Common
     {
