@@ -74,7 +74,12 @@ namespace PWEncryptionTool
             else
             {
                 byte[] processedData = ProcessData(data, encrypt);
-                Directory.CreateDirectory(Path.GetDirectoryName(opts.OutputFile));
+                string outputDir = Path.GetDirectoryName(opts.OutputFile);
+                if (!string.IsNullOrEmpty(outputDir))
+                {
+                    Directory.CreateDirectory(outputDir);
+                }
+
                 File.WriteAllBytes(opts.OutputFile, processedData);
                 Console.WriteLine(" DONE!");
             }
